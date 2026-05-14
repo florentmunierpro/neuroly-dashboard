@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuroly · Masterclass Analytics</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f18;
+      --surface: #13161f;
+      --surface2: #1c2030;
+      --surface3: #222640;
+      --border: #2a2d45;
+      --accent: #7c6fff;
+      --green: #00cfa8;
+      --red: #ff5e5e;
+      --orange: #ffb347;
+      --blue: #4dabf7;
+      --text: #e8eaf2;
+      --muted: #6b6f90;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 58px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: white;
+    }
+
+    .mc-selector {
+      flex: 1;
+      max-width: 400px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .mc-selector:focus { border-color: var(--accent); }
+
+    .tabs { display: flex; gap: 4px; margin-left: auto; }
+
+    .tab {
+      padding: 7px 16px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .tab.active { background: var(--surface2); color: var(--text); }
+    .tab:hover:not(.active) { color: var(--text); }
+    .tab.new-btn { background: var(--accent); color: white; }
+    .tab.new-btn:hover { opacity: .85; color: white; }
+
+    /* ── Views ── */
+    .view { display: none; flex: 1; }
+    .view.active { display: block; }
+
+    /* ── Dashboard ── */
+    .dash { padding: 28px 28px 60px; max-width: 1280px; margin: 0 auto; }
+
+    .mc-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mc-meta h1 { font-size: 20px; font-weight: 700; }
+
+    .mc-meta-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .section { margin-bottom: 32px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .section-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* KPI grid */
+    .kpi-row { display: grid; gap: 12px; }
+    .kpi-row-4 { grid-template-columns: repeat(4, 1fr); }
+    .kpi-row-3 { grid-template-columns: repeat(3, 1fr); }
+    .kpi-row-2 { grid-template-columns: repeat(2, 1fr); }
+
+    @media (max-width: 900px) {
+      .kpi-row-4 { grid-template-columns: repeat(2, 1fr); }
+      .kpi-row-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-stripe {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .4px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .kpi-unit {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 3px;
+    }
+
+    /* Pub layout: KPIs + creatives side by side */
+    .pub-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) { .pub-layout { grid-template-columns: 1fr; } }
+
+    .pub-kpis { display: flex; flex-direction: column; gap: 12px; }
+
+    /* Creatives card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .creative-list { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+
+    .creative-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+    }
+
+    .creative-rank {
+      font-size: 16px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .creative-name { font-size: 13px; font-weight: 600; flex: 1; }
+
+    .creative-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .badge-top    { background: rgba(0,207,168,.2);  color: #00cfa8; }
+    .badge-bon    { background: rgba(77,171,247,.2);  color: #4dabf7; }
+    .badge-moyen  { background: rgba(255,179,71,.2);  color: #ffb347; }
+    .badge-sous   { background: rgba(255,94,94,.15);  color: #ff5e5e; }
+
+    /* Two-column: chart + table */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .chart-wrap { padding: 20px; height: 260px; position: relative; }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      padding: 11px 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface2); }
+
+    tbody td { padding: 12px 16px; font-size: 13px; }
+
+    .source-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .num { font-weight: 700; font-size: 14px; }
+    .rate { font-size: 12px; color: var(--muted); margin-left: 4px; }
+
+    /* ── Form ── */
+    .form-wrap { padding: 28px; max-width: 760px; margin: 0 auto; }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+
+    .form-card h2 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-row   { display: grid; grid-template-columns: 1fr 1fr;             gap: 14px; margin-bottom: 14px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr;         gap: 14px; margin-bottom: 14px; }
+    .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;     gap: 14px; margin-bottom: 14px; }
+    .form-row:last-child, .form-row-3:last-child, .form-row-4:last-child { margin-bottom: 0; }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input, select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 13px;
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color .15s;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    input:focus, select:focus { border-color: var(--accent); }
+    select option { background: var(--surface2); }
+
+    /* Sources rows */
+    .sources-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .source-row-form {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .source-name-row { margin-bottom: 10px; }
+
+    .source-row-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 32px;
+      gap: 10px;
+      align-items: end;
+    }
+
+    /* Creatives rows */
+    .creatives-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .creative-row-form {
+      display: grid;
+      grid-template-columns: 1fr 160px 32px;
+      gap: 10px;
+      align-items: end;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .rm-btn {
+      background: rgba(255,94,94,.15);
+      border: 1px solid rgba(255,94,94,.3);
+      color: var(--red);
+      border-radius: 6px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all .15s;
+      flex-shrink: 0;
+    }
+
+    .rm-btn:hover { background: var(--red); color: white; }
+
+    .add-row-btn {
+      background: transparent;
+      border: 1px dashed var(--border);
+      color: var(--muted);
+      border-radius: 10px;
+      padding: 11px;
+      font-size: 13px;
+      width: 100%;
+      cursor: pointer;
+      transition: all .15s;
+      margin-top: 4px;
+    }
+
+    .add-row-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover { opacity: .85; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .empty {
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty h2 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+    .empty p { font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">N</div>
+    <span>Masterclass Analytics</span>
+  </div>
+  <select id="mc-select" class="mc-selector" onchange="selectMC(this.value)">
+    <option value="">Choisir une masterclass…</option>
+  </select>
+  <div class="tabs">
+    <button class="tab active" id="tab-dash" onclick="showTab('dashboard')">Dashboard</button>
+    <button class="tab new-btn" id="tab-saisie" onclick="showTab('saisie')">+ Nouvelle</button>
+  </div>
+</header>
+
+<!-- ── Dashboard ── -->
+<div id="view-dashboard" class="view active">
+  <div id="dash-content"></div>
+</div>
+
+<!-- ── Saisie ── -->
+<div id="view-saisie" class="view">
+  <div class="form-wrap">
+
+    <div class="form-card">
+      <h2>Informations générales</h2>
+      <div class="form-row">
+        <div class="fg"><label>Date</label><input type="date" id="f-date"></div>
+        <div class="fg"><label>Thématique</label><input type="text" id="f-theme" placeholder="Ex: La place dans la fratrie"></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Budget & Acquisition</h2>
+      <div class="form-row">
+        <div class="fg"><label>Budget pub (CHF)</label><input type="number" id="f-budget" step="0.01" placeholder="282.33"></div>
+        <div class="fg"><label>Visiteurs LP (total)</label><input type="number" id="f-visiteurs" placeholder="2700"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Pages vues</label><input type="number" id="f-pages" placeholder="2943"></div>
+        <div class="fg"><label>Inscrits</label><input type="number" id="f-inscrits" placeholder="66"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>CPL (CHF)</label><input type="number" id="f-cpl" step="0.01" placeholder="4.28"></div>
+        <div class="fg"><label>Coût / visite (CHF)</label><input type="number" id="f-cout" step="0.01" placeholder="0.18"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Bounce rate (%)</label><input type="number" id="f-bounce" placeholder="93"></div>
+        <div class="fg"><label>Tps moyen page (sec)</label><input type="number" id="f-tps" placeholder="5"></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Publicité</h2>
+      <div class="form-row-3">
+        <div class="fg"><label>Impressions</label><input type="number" id="f-impressions" placeholder="53444"></div>
+        <div class="fg"><label>Reach</label><input type="number" id="f-reach" placeholder="30833"></div>
+        <div class="fg"><label>LP Views (pub)</label><input type="number" id="f-lpviews" placeholder="1542"></div>
+      </div>
+      <div style="margin-top:16px;margin-bottom:10px;">
+        <label style="display:block;margin-bottom:10px">Classement des créatifs</label>
+        <div id="creatives-list" class="creatives-list"></div>
+        <button class="add-row-btn" onclick="addCreativeRow()">+ Ajouter un créatif</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Présence</h2>
+      <div class="form-row">
+        <div class="fg"><label>Présents</label><input type="number" id="f-presents" placeholder="27"></div>
+        <div class="fg"><label>Show-up rate (%)</label><input type="number" id="f-showup" step="0.1" placeholder="40.9"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Replay</label><input type="number" id="f-replay" placeholder="17"></div>
+        <div class="fg"><label>No-show rate (%)</label><input type="number" id="f-noshow" step="0.1" placeholder="59.1"></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Conversion</h2>
+      <div class="form-row-3">
+        <div class="fg"><label>Calls live</label><input type="number" id="f-callslive" placeholder="0"></div>
+        <div class="fg"><label>Calls totaux</label><input type="number" id="f-callstot" placeholder="3"></div>
+        <div class="fg"><label>Taux conversion (%)</label><input type="number" id="f-tconv" step="0.1" placeholder="4.5"></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h2>Provenance des leads</h2>
+      <div id="sources-list" class="sources-list"></div>
+      <button class="add-row-btn" onclick="addSourceRow()">+ Ajouter une source</button>
+    </div>
+
+    <button class="submit-btn" onclick="saveMC()">Enregistrer la masterclass</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const COLORS = ['#7c6fff','#00cfa8','#ff5e5e','#ffb347','#4dabf7','#f06292','#69db7c','#ffa94d'];
+
+const PERF_META = {
+  top:   { label: 'Meilleure perf.',   cls: 'badge-top',   icon: '🥇' },
+  bon:   { label: 'Bonne perf.',       cls: 'badge-bon',   icon: '🥈' },
+  moyen: { label: 'Performance moy.', cls: 'badge-moyen', icon: '🟡' },
+  sous:  { label: 'Sous-performante',  cls: 'badge-sous',  icon: '⚠️' }
+};
+
+// ── Seed data ──────────────────────────────────────────────────────────
+const SEED = [{
+  id: 1,
+  date: '2026-04-29',
+  theme: 'La place dans la fratrie',
+  budget: 282.33, visiteurs: 2700, pages: 2943, inscrits: 66,
+  cpl: 4.28, cout: 0.18, bounce: 93, tps: 5,
+  impressions: 53444, reach: 30833, lpviews: 1542,
+  creatives: [
+    { name: 'Créa 3', perf: 'top'  },
+    { name: 'Créa 4', perf: 'bon'  },
+    { name: 'Créa 1', perf: 'sous' },
+    { name: 'Créa 2', perf: 'sous' }
+  ],
+  presents: 27, showup: 40.9, replay: 17, noshow: 59.1,
+  callslive: 0, callstot: 3, tconv: 4.5,
+  sources: [
+    { name: 'Neuroly Publicité', leads: 15, presents: 9, replay: 6, calls: 2 },
+    { name: 'Neuroly Site',      leads: 23, presents: 12, replay: 4, calls: 1 },
+    { name: 'Solve Publicité',   leads: 13, presents: 4,  replay: 4, calls: 0 },
+    { name: 'Prospect Site',     leads: 18, presents: 4,  replay: 3, calls: 0 }
+  ]
+}];
+
+// ── State ──────────────────────────────────────────────────────────────
+let db = (() => {
+  try { return JSON.parse(localStorage.getItem('mc_db_v2')) || SEED; }
+  catch { return SEED; }
+})();
+
+let currentId = db[0]?.id ?? null;
+let sourceChart = null;
+
+function persist() { localStorage.setItem('mc_db_v2', JSON.stringify(db)); }
+
+// ── Nav ────────────────────────────────────────────────────────────────
+function rebuildSelector() {
+  const sel = document.getElementById('mc-select');
+  sel.innerHTML = db.map(mc =>
+    `<option value="${mc.id}" ${mc.id === currentId ? 'selected' : ''}>
+      ${fmtDate(mc.date)} — ${mc.theme}
+    </option>`
+  ).join('');
+}
+
+function selectMC(id) {
+  currentId = parseInt(id);
+  renderDash();
+}
+
+function showTab(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.getElementById('tab-dash').classList.toggle('active', name === 'dashboard');
+  if (name === 'saisie') resetForm();
+  else renderDash();
+}
+
+// ── Dashboard ──────────────────────────────────────────────────────────
+function renderDash() {
+  const mc = db.find(m => m.id === currentId);
+  const el = document.getElementById('dash-content');
+
+  if (!mc) {
+    el.innerHTML = `<div class="empty">
+      <h2>Aucune masterclass</h2>
+      <p>Créez votre première masterclass via le bouton "+ Nouvelle"</p>
+    </div>`;
+    return;
+  }
+
+  const totalLeads = mc.sources.reduce((s, r) => s + r.leads, 0);
+  const cpm = (mc.impressions && mc.budget)
+    ? ((mc.budget / mc.impressions) * 1000).toFixed(2)
+    : null;
+
+  el.innerHTML = `
+  <div class="dash">
+
+    <div class="mc-meta">
+      <h1>${mc.theme}</h1>
+      <span class="mc-meta-badge">${fmtDate(mc.date)}</span>
+    </div>
+
+    <!-- Budget & Acquisition -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(124,111,255,.15);color:#7c6fff">📣</div>
+        <span class="section-title">Budget & Acquisition</span>
+      </div>
+      <div class="kpi-row kpi-row-4">
+        ${kpi('Budget pub', fmt(mc.budget, 'CHF'), '#7c6fff')}
+        ${kpi('Visiteurs LP', fmt(mc.visiteurs), '#7c6fff')}
+        ${kpi('Pages vues', fmt(mc.pages), '#7c6fff')}
+        ${kpi('Inscrits', fmt(mc.inscrits), '#7c6fff')}
+      </div>
+      <div class="kpi-row kpi-row-4" style="margin-top:12px">
+        ${kpi('CPL', fmt(mc.cpl, 'CHF'), '#4dabf7')}
+        ${kpi('Coût / visite', fmt(mc.cout, 'CHF'), '#4dabf7')}
+        ${kpi('Bounce rate', fmt(mc.bounce, '%'), '#ff5e5e')}
+        ${kpi('Tps moyen / page', mc.tps != null ? mc.tps + ' sec' : '—', '#ffb347')}
+      </div>
+    </div>
+
+    <!-- Publicité -->
+    ${(mc.impressions || mc.reach || mc.lpviews || mc.creatives?.length) ? `
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(255,179,71,.15);color:#ffb347">🎯</div>
+        <span class="section-title">Publicité</span>
+      </div>
+      <div class="pub-layout">
+        <div class="pub-kpis">
+          <div class="kpi-row kpi-row-3">
+            ${kpi('Impressions', fmt(mc.impressions), '#ffb347')}
+            ${kpi('Reach', fmt(mc.reach), '#ffb347')}
+            ${kpi('LP Views (pub)', fmt(mc.lpviews), '#ffb347')}
+          </div>
+          ${cpm ? `<div class="kpi-row kpi-row-2">
+            ${kpi('CPM estimé', fmt(cpm, 'CHF'), '#ff5e5e')}
+            ${kpi('LP Views / Reach', mc.reach ? pct(mc.lpviews, mc.reach) : '—', '#4dabf7')}
+          </div>` : ''}
+        </div>
+        ${mc.creatives?.length ? `
+        <div class="card">
+          <div class="card-header">Classement créatifs</div>
+          <div class="creative-list">
+            ${mc.creatives.map(c => {
+              const m = PERF_META[c.perf] || PERF_META.moyen;
+              return `<div class="creative-item">
+                <span class="creative-rank">${m.icon}</span>
+                <span class="creative-name">${c.name}</span>
+                <span class="creative-badge ${m.cls}">${m.label}</span>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>` : ''}
+
+    <!-- Présence -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(0,207,168,.15);color:#00cfa8">👥</div>
+        <span class="section-title">Présence</span>
+      </div>
+      <div class="kpi-row kpi-row-4">
+        ${kpi('Participants présents', fmt(mc.presents), '#00cfa8')}
+        ${kpi('Show-up rate', fmt(mc.showup, '%'), '#00cfa8')}
+        ${kpi('Replay', fmt(mc.replay), '#4dabf7')}
+        ${kpi('No-show rate', fmt(mc.noshow, '%'), '#ff5e5e')}
+      </div>
+    </div>
+
+    <!-- Conversion -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(77,171,247,.15);color:#4dabf7">📞</div>
+        <span class="section-title">Conversion</span>
+      </div>
+      <div class="kpi-row kpi-row-3">
+        ${kpi('Calls live', fmt(mc.callslive), '#4dabf7')}
+        ${kpi('Calls totaux', fmt(mc.callstot), '#4dabf7')}
+        ${kpi('Taux conversion global', fmt(mc.tconv, '%'), '#4dabf7')}
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(124,111,255,.15);color:#7c6fff">📊</div>
+        <span class="section-title">Provenance des leads</span>
+      </div>
+      <div class="two-col">
+        <div class="chart-card">
+          <div class="card-header">Comparaison par source</div>
+          <div class="chart-wrap"><canvas id="source-chart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="card-header">Détail</div>
+          <table>
+            <thead><tr>
+              <th>Source</th>
+              <th>Leads</th>
+              <th>Présents</th>
+              <th>Replay</th>
+              <th>Calls</th>
+            </tr></thead>
+            <tbody>
+              ${mc.sources.map((s, i) => `
+                <tr>
+                  <td>
+                    <span class="source-dot" style="background:${COLORS[i % COLORS.length]}"></span>
+                    ${s.name}
+                  </td>
+                  <td><span class="num">${s.leads}</span><span class="rate">${totalLeads ? pct(s.leads, totalLeads) : ''}</span></td>
+                  <td><span class="num">${s.presents}</span><span class="rate">${s.leads ? pct(s.presents, s.leads) : ''}</span></td>
+                  <td><span class="num">${s.replay}</span></td>
+                  <td><span class="num">${s.calls}</span></td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>`;
+
+  requestAnimationFrame(() => drawSourceChart(mc));
+}
+
+function kpi(label, value, color) {
+  return `<div class="kpi">
+    <div class="kpi-stripe" style="background:${color}"></div>
+    <div class="kpi-label">${label}</div>
+    <div class="kpi-value">${value}</div>
+  </div>`;
+}
+
+function fmt(v, unit = '') {
+  if (v === null || v === undefined || v === '') return '—';
+  const n = Number(v);
+  const s = Number.isInteger(n)
+    ? n.toLocaleString('fr-FR')
+    : n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return unit ? `${s} <span class="kpi-unit">${unit}</span>` : s;
+}
+
+function pct(a, b) {
+  if (!b) return '';
+  return `${((a / b) * 100).toFixed(1)}%`;
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d + 'T00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+function drawSourceChart(mc) {
+  if (sourceChart) { sourceChart.destroy(); sourceChart = null; }
+  const ctx = document.getElementById('source-chart');
+  if (!ctx || !mc.sources.length) return;
+
+  sourceChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: mc.sources.map(s => s.name),
+      datasets: [
+        { label: 'Leads',    data: mc.sources.map(s => s.leads),    backgroundColor: 'rgba(124,111,255,.85)', borderRadius: 5 },
+        { label: 'Présents', data: mc.sources.map(s => s.presents), backgroundColor: 'rgba(0,207,168,.85)',   borderRadius: 5 },
+        { label: 'Replay',   data: mc.sources.map(s => s.replay),   backgroundColor: 'rgba(77,171,247,.85)',  borderRadius: 5 },
+        { label: 'Calls',    data: mc.sources.map(s => s.calls),    backgroundColor: 'rgba(255,179,71,.85)',  borderRadius: 5 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#6b6f90', font: { size: 11 }, boxWidth: 10, padding: 12 } }
+      },
+      scales: {
+        x: { grid: { color: '#2a2d45' }, ticks: { color: '#6b6f90', font: { size: 10 }, maxRotation: 20 } },
+        y: { grid: { color: '#2a2d45' }, ticks: { color: '#6b6f90', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ── Form – sources ─────────────────────────────────────────────────────
+let sourceRows = [];
+
+function renderSourceRows() {
+  document.getElementById('sources-list').innerHTML = sourceRows.map((s, i) => `
+    <div class="source-row-form">
+      <div class="source-name-row">
+        <div class="fg">
+          <label>Nom de la source</label>
+          <input type="text" value="${s.name}" placeholder="Ex: Neuroly Publicité"
+            oninput="sourceRows[${i}].name = this.value">
+        </div>
+      </div>
+      <div class="source-row-top">
+        <div class="fg"><label>Leads</label>    <input type="number" value="${s.leads}"    placeholder="0" oninput="sourceRows[${i}].leads    = +this.value"></div>
+        <div class="fg"><label>Présents</label> <input type="number" value="${s.presents}" placeholder="0" oninput="sourceRows[${i}].presents = +this.value"></div>
+        <div class="fg"><label>Replay</label>   <input type="number" value="${s.replay}"   placeholder="0" oninput="sourceRows[${i}].replay   = +this.value"></div>
+        <div class="fg"><label>Calls</label>    <input type="number" value="${s.calls}"    placeholder="0" oninput="sourceRows[${i}].calls    = +this.value"></div>
+        ${sourceRows.length > 1 ? `<div class="rm-btn" onclick="removeSourceRow(${i})">×</div>` : '<div></div>'}
+      </div>
+    </div>`).join('');
+}
+
+function addSourceRow()       { sourceRows.push({ name:'', leads:0, presents:0, replay:0, calls:0 }); renderSourceRows(); }
+function removeSourceRow(i)   { sourceRows.splice(i, 1); renderSourceRows(); }
+
+// ── Form – creatives ───────────────────────────────────────────────────
+let creativeRows = [];
+
+function renderCreativeRows() {
+  document.getElementById('creatives-list').innerHTML = creativeRows.map((c, i) => `
+    <div class="creative-row-form">
+      <div class="fg">
+        <label>Nom</label>
+        <input type="text" value="${c.name}" placeholder="Ex: Créa 1"
+          oninput="creativeRows[${i}].name = this.value">
+      </div>
+      <div class="fg">
+        <label>Performance</label>
+        <select onchange="creativeRows[${i}].perf = this.value">
+          ${Object.entries(PERF_META).map(([k, v]) =>
+            `<option value="${k}" ${c.perf === k ? 'selected' : ''}>${v.icon} ${v.label}</option>`
+          ).join('')}
+        </select>
+      </div>
+      ${creativeRows.length > 1 ? `<div class="rm-btn" onclick="removeCreativeRow(${i})">×</div>` : '<div></div>'}
+    </div>`).join('');
+}
+
+function addCreativeRow()      { creativeRows.push({ name: '', perf: 'top' }); renderCreativeRows(); }
+function removeCreativeRow(i)  { creativeRows.splice(i, 1); renderCreativeRows(); }
+
+// ── Reset form ─────────────────────────────────────────────────────────
+function resetForm() {
+  ['date','theme','budget','visiteurs','pages','inscrits','cpl','cout','bounce','tps',
+   'impressions','reach','lpviews',
+   'presents','showup','replay','noshow','callslive','callstot','tconv']
+    .forEach(id => { const el = document.getElementById('f-' + id); if (el) el.value = ''; });
+
+  sourceRows   = [{ name: '', leads: 0, presents: 0, replay: 0, calls: 0 }];
+  creativeRows = [{ name: '', perf: 'top' }];
+  renderSourceRows();
+  renderCreativeRows();
+}
+
+// ── Save ───────────────────────────────────────────────────────────────
+function g(id) {
+  const v = document.getElementById('f-' + id)?.value;
+  return (v === '' || v == null) ? null : parseFloat(v);
+}
+
+function saveMC() {
+  const date  = document.getElementById('f-date').value;
+  const theme = document.getElementById('f-theme').value.trim();
+  if (!date || !theme) { toast('Date et thématique obligatoires', true); return; }
+
+  const mc = {
+    id: Date.now(),
+    date, theme,
+    budget: g('budget'), visiteurs: g('visiteurs'), pages: g('pages'), inscrits: g('inscrits'),
+    cpl: g('cpl'), cout: g('cout'), bounce: g('bounce'), tps: g('tps'),
+    impressions: g('impressions'), reach: g('reach'), lpviews: g('lpviews'),
+    creatives: creativeRows.filter(c => c.name.trim()),
+    presents: g('presents'), showup: g('showup'), replay: g('replay'), noshow: g('noshow'),
+    callslive: g('callslive'), callstot: g('callstot'), tconv: g('tconv'),
+    sources: sourceRows.filter(s => s.name.trim())
+  };
+
+  db.unshift(mc);
+  currentId = mc.id;
+  persist();
+  rebuildSelector();
+  showTab('dashboard');
+  toast('Masterclass enregistrée !');
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────
+function toast(msg, isError = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = isError ? 'var(--red)' : 'var(--green)';
+  el.style.color = isError ? 'white' : '#0d0f18';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── Init ───────────────────────────────────────────────────────────────
+rebuildSelector();
+resetForm();
+renderDash();
+</script>
+</body>
+</html>
