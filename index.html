@@ -77,7 +77,6 @@
     }
 
     .mc-selector:focus { border-color: var(--accent); }
-
     .tabs { display: flex; gap: 4px; margin-left: auto; }
 
     .tab {
@@ -200,7 +199,6 @@
       margin-left: 3px;
     }
 
-    /* Pub layout: KPIs + creatives side by side */
     .pub-layout {
       display: grid;
       grid-template-columns: 1fr 300px;
@@ -211,7 +209,6 @@
 
     .pub-kpis { display: flex; flex-direction: column; gap: 12px; }
 
-    /* Creatives card */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -241,13 +238,7 @@
       border: 1px solid var(--border);
     }
 
-    .creative-rank {
-      font-size: 16px;
-      width: 24px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
+    .creative-rank { font-size: 16px; width: 24px; text-align: center; flex-shrink: 0; }
     .creative-name { font-size: 13px; font-weight: 600; flex: 1; }
 
     .creative-badge {
@@ -259,12 +250,11 @@
       border-radius: 20px;
     }
 
-    .badge-top    { background: rgba(0,207,168,.2);  color: #00cfa8; }
-    .badge-bon    { background: rgba(77,171,247,.2);  color: #4dabf7; }
-    .badge-moyen  { background: rgba(255,179,71,.2);  color: #ffb347; }
-    .badge-sous   { background: rgba(255,94,94,.15);  color: #ff5e5e; }
+    .badge-top    { background: rgba(0,184,148,.15);  color: #00b894; }
+    .badge-bon    { background: rgba(41,128,185,.15);  color: #2980b9; }
+    .badge-moyen  { background: rgba(243,156,18,.15);  color: #f39c12; }
+    .badge-sous   { background: rgba(231,76,60,.12);   color: #e74c3c; }
 
-    /* Two-column: chart + table */
     .two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -298,7 +288,6 @@
     tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: var(--surface2); }
-
     tbody td { padding: 12px 16px; font-size: 13px; }
 
     .source-dot {
@@ -310,6 +299,225 @@
 
     .num { font-weight: 700; font-size: 14px; }
     .rate { font-size: 12px; color: var(--muted); margin-left: 4px; }
+
+    /* ── Funnel view ── */
+    .funnel-wrap {
+      padding: 28px 28px 60px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .funnel-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) { .funnel-layout { grid-template-columns: 1fr; } }
+
+    .funnel-main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+    }
+
+    .funnel-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    /* Each funnel step */
+    .funnel-step-wrap { margin-bottom: 4px; }
+
+    .funnel-step {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 48px;
+    }
+
+    .funnel-left {
+      width: 160px;
+      flex-shrink: 0;
+      text-align: right;
+      padding-right: 16px;
+    }
+
+    .funnel-group-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 3px;
+    }
+
+    .funnel-step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+    }
+
+    .funnel-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .funnel-bar-track {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .funnel-bar {
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: width .6s ease;
+      position: relative;
+    }
+
+    .funnel-right {
+      width: 120px;
+      flex-shrink: 0;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .funnel-val {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      line-height: 1;
+    }
+
+    .funnel-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Connector between steps */
+    .funnel-connector {
+      display: flex;
+      align-items: center;
+      padding: 2px 0;
+      padding-left: 160px;
+    }
+
+    .funnel-connector-line {
+      width: 1px;
+      height: 18px;
+      margin: 0 auto;
+      flex-shrink: 0;
+    }
+
+    .funnel-connector-inner {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .conv-arrow {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .conv-rate {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: .3px;
+    }
+
+    .conv-rate.good  { background: rgba(0,184,148,.12); color: #00b894; }
+    .conv-rate.ok    { background: rgba(243,156,18,.12); color: #c0892a; }
+    .conv-rate.warn  { background: rgba(231,76,60,.10);  color: #e74c3c; }
+
+    .conv-lost {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Right panel: synthèse */
+    .synthesis-panel { display: flex; flex-direction: column; gap: 12px; }
+
+    .synth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .synth-card h3 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .friction-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .friction-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .friction-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .friction-label { font-size: 12px; font-weight: 600; color: var(--text); }
+    .friction-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .global-rate {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rate-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rate-row:last-child { border-bottom: none; }
+    .rate-label { font-size: 12px; color: var(--muted); }
+    .rate-val { font-size: 13px; font-weight: 700; }
 
     /* ── Form ── */
     .form-wrap { padding: 28px; max-width: 760px; margin: 0 auto; }
@@ -328,16 +536,12 @@
       margin-bottom: 18px;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .fg { display: flex; flex-direction: column; gap: 6px; }
-
-    .form-row   { display: grid; grid-template-columns: 1fr 1fr;             gap: 14px; margin-bottom: 14px; }
-    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr;         gap: 14px; margin-bottom: 14px; }
-    .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;     gap: 14px; margin-bottom: 14px; }
+    .form-row   { display: grid; grid-template-columns: 1fr 1fr;         gap: 14px; margin-bottom: 14px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 14px; margin-bottom: 14px; }
+    .form-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .form-row:last-child, .form-row-3:last-child, .form-row-4:last-child { margin-bottom: 0; }
 
     label {
@@ -364,7 +568,6 @@
     input:focus, select:focus { border-color: var(--accent); }
     select option { background: var(--surface2); }
 
-    /* Sources rows */
     .sources-list { display: flex; flex-direction: column; gap: 10px; }
 
     .source-row-form {
@@ -383,7 +586,6 @@
       align-items: end;
     }
 
-    /* Creatives rows */
     .creatives-list { display: flex; flex-direction: column; gap: 8px; }
 
     .creative-row-form {
@@ -398,8 +600,8 @@
     }
 
     .rm-btn {
-      background: rgba(255,94,94,.15);
-      border: 1px solid rgba(255,94,94,.3);
+      background: rgba(231,76,60,.1);
+      border: 1px solid rgba(231,76,60,.25);
       color: var(--red);
       border-radius: 6px;
       width: 32px; height: 32px;
@@ -443,7 +645,6 @@
 
     .submit-btn:hover { opacity: .85; }
 
-    /* ── Toast ── */
     .toast {
       position: fixed;
       bottom: 24px; right: 24px;
@@ -460,12 +661,7 @@
 
     .toast.show { opacity: 1; transform: translateY(0); }
 
-    .empty {
-      padding: 80px 24px;
-      text-align: center;
-      color: var(--muted);
-    }
-
+    .empty { padding: 80px 24px; text-align: center; color: var(--muted); }
     .empty h2 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
     .empty p { font-size: 13px; }
   </style>
@@ -481,14 +677,20 @@
     <option value="">Choisir une masterclass…</option>
   </select>
   <div class="tabs">
-    <button class="tab active" id="tab-dash" onclick="showTab('dashboard')">Dashboard</button>
-    <button class="tab new-btn" id="tab-saisie" onclick="showTab('saisie')">+ Nouvelle</button>
+    <button class="tab active" id="tab-dashboard"  onclick="showTab('dashboard')">Dashboard</button>
+    <button class="tab"        id="tab-funnel"     onclick="showTab('funnel')">Trame de vente</button>
+    <button class="tab new-btn" id="tab-saisie"    onclick="showTab('saisie')">+ Nouvelle</button>
   </div>
 </header>
 
 <!-- ── Dashboard ── -->
 <div id="view-dashboard" class="view active">
   <div id="dash-content"></div>
+</div>
+
+<!-- ── Trame de vente ── -->
+<div id="view-funnel" class="view">
+  <div id="funnel-content"></div>
 </div>
 
 <!-- ── Saisie ── -->
@@ -556,6 +758,11 @@
         <div class="fg"><label>Calls totaux</label><input type="number" id="f-callstot" placeholder="3"></div>
         <div class="fg"><label>Taux conversion (%)</label><input type="number" id="f-tconv" step="0.1" placeholder="4.5"></div>
       </div>
+      <div class="form-row-3" style="margin-top:14px">
+        <div class="fg"><label>Calls demandés ✦</label><input type="number" id="f-calls_demandes" placeholder="0"></div>
+        <div class="fg"><label>Présents en calls ✦</label><input type="number" id="f-presents_calls" placeholder="0"></div>
+        <div class="fg"><label>Deals closés ✦</label><input type="number" id="f-deals" placeholder="0"></div>
+      </div>
     </div>
 
     <div class="form-card">
@@ -571,16 +778,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const COLORS = ['#7c6fff','#00cfa8','#ff5e5e','#ffb347','#4dabf7','#f06292','#69db7c','#ffa94d'];
+const COLORS = ['#7c6fff','#00b894','#e74c3c','#f39c12','#2980b9','#e91e63','#4caf50','#ff9800'];
 
 const PERF_META = {
-  top:   { label: 'Meilleure perf.',   cls: 'badge-top',   icon: '🥇' },
-  bon:   { label: 'Bonne perf.',       cls: 'badge-bon',   icon: '🥈' },
+  top:   { label: 'Meilleure perf.',  cls: 'badge-top',   icon: '🥇' },
+  bon:   { label: 'Bonne perf.',      cls: 'badge-bon',   icon: '🥈' },
   moyen: { label: 'Performance moy.', cls: 'badge-moyen', icon: '🟡' },
-  sous:  { label: 'Sous-performante',  cls: 'badge-sous',  icon: '⚠️' }
+  sous:  { label: 'Sous-performante', cls: 'badge-sous',  icon: '⚠️' }
 };
 
-// ── Seed data ──────────────────────────────────────────────────────────
+// ── Seed ───────────────────────────────────────────────────────────────
 const SEED = [{
   id: 1,
   date: '2026-04-29',
@@ -596,8 +803,9 @@ const SEED = [{
   ],
   presents: 27, showup: 40.9, replay: 17, noshow: 59.1,
   callslive: 0, callstot: 3, tconv: 4.5,
+  calls_demandes: null, presents_calls: null, deals: null,
   sources: [
-    { name: 'Neuroly Publicité', leads: 15, presents: 9, replay: 6, calls: 2 },
+    { name: 'Neuroly Publicité', leads: 15, presents: 9,  replay: 6, calls: 2 },
     { name: 'Neuroly Site',      leads: 23, presents: 12, replay: 4, calls: 1 },
     { name: 'Solve Publicité',   leads: 13, presents: 4,  replay: 4, calls: 0 },
     { name: 'Prospect Site',     leads: 18, presents: 4,  replay: 3, calls: 0 }
@@ -606,14 +814,14 @@ const SEED = [{
 
 // ── State ──────────────────────────────────────────────────────────────
 let db = (() => {
-  try { return JSON.parse(localStorage.getItem('mc_db_v2')) || SEED; }
+  try { return JSON.parse(localStorage.getItem('mc_db_v3')) || SEED; }
   catch { return SEED; }
 })();
 
 let currentId = db[0]?.id ?? null;
 let sourceChart = null;
 
-function persist() { localStorage.setItem('mc_db_v2', JSON.stringify(db)); }
+function persist() { localStorage.setItem('mc_db_v3', JSON.stringify(db)); }
 
 // ── Nav ────────────────────────────────────────────────────────────────
 function rebuildSelector() {
@@ -627,14 +835,18 @@ function rebuildSelector() {
 
 function selectMC(id) {
   currentId = parseInt(id);
-  renderDash();
+  const active = document.querySelector('.view.active');
+  if (active?.id === 'view-funnel') renderFunnel();
+  else renderDash();
 }
 
 function showTab(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
-  document.getElementById('tab-dash').classList.toggle('active', name === 'dashboard');
-  if (name === 'saisie') resetForm();
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'saisie')    resetForm();
+  else if (name === 'funnel') renderFunnel();
   else renderDash();
 }
 
@@ -644,30 +856,23 @@ function renderDash() {
   const el = document.getElementById('dash-content');
 
   if (!mc) {
-    el.innerHTML = `<div class="empty">
-      <h2>Aucune masterclass</h2>
-      <p>Créez votre première masterclass via le bouton "+ Nouvelle"</p>
-    </div>`;
+    el.innerHTML = `<div class="empty"><h2>Aucune masterclass</h2><p>Créez votre première masterclass via le bouton "+ Nouvelle"</p></div>`;
     return;
   }
 
   const totalLeads = mc.sources.reduce((s, r) => s + r.leads, 0);
-  const cpm = (mc.impressions && mc.budget)
-    ? ((mc.budget / mc.impressions) * 1000).toFixed(2)
-    : null;
+  const cpm = (mc.impressions && mc.budget) ? ((mc.budget / mc.impressions) * 1000).toFixed(2) : null;
 
   el.innerHTML = `
   <div class="dash">
-
     <div class="mc-meta">
       <h1>${mc.theme}</h1>
       <span class="mc-meta-badge">${fmtDate(mc.date)}</span>
     </div>
 
-    <!-- Budget & Acquisition -->
     <div class="section">
       <div class="section-header">
-        <div class="section-icon" style="background:rgba(124,111,255,.15);color:#7c6fff">📣</div>
+        <div class="section-icon" style="background:rgba(124,111,255,.12);color:#7c6fff">📣</div>
         <span class="section-title">Budget & Acquisition</span>
       </div>
       <div class="kpi-row kpi-row-4">
@@ -677,30 +882,29 @@ function renderDash() {
         ${kpi('Inscrits', fmt(mc.inscrits), '#7c6fff')}
       </div>
       <div class="kpi-row kpi-row-4" style="margin-top:12px">
-        ${kpi('CPL', fmt(mc.cpl, 'CHF'), '#4dabf7')}
-        ${kpi('Coût / visite', fmt(mc.cout, 'CHF'), '#4dabf7')}
-        ${kpi('Bounce rate', fmt(mc.bounce, '%'), '#ff5e5e')}
-        ${kpi('Tps moyen / page', mc.tps != null ? mc.tps + ' sec' : '—', '#ffb347')}
+        ${kpi('CPL', fmt(mc.cpl, 'CHF'), '#2980b9')}
+        ${kpi('Coût / visite', fmt(mc.cout, 'CHF'), '#2980b9')}
+        ${kpi('Bounce rate', fmt(mc.bounce, '%'), '#e74c3c')}
+        ${kpi('Tps moyen / page', mc.tps != null ? mc.tps + ' sec' : '—', '#f39c12')}
       </div>
     </div>
 
-    <!-- Publicité -->
     ${(mc.impressions || mc.reach || mc.lpviews || mc.creatives?.length) ? `
     <div class="section">
       <div class="section-header">
-        <div class="section-icon" style="background:rgba(255,179,71,.15);color:#ffb347">🎯</div>
+        <div class="section-icon" style="background:rgba(243,156,18,.12);color:#f39c12">🎯</div>
         <span class="section-title">Publicité</span>
       </div>
       <div class="pub-layout">
         <div class="pub-kpis">
           <div class="kpi-row kpi-row-3">
-            ${kpi('Impressions', fmt(mc.impressions), '#ffb347')}
-            ${kpi('Reach', fmt(mc.reach), '#ffb347')}
-            ${kpi('LP Views (pub)', fmt(mc.lpviews), '#ffb347')}
+            ${kpi('Impressions', fmt(mc.impressions), '#f39c12')}
+            ${kpi('Reach', fmt(mc.reach), '#f39c12')}
+            ${kpi('LP Views (pub)', fmt(mc.lpviews), '#f39c12')}
           </div>
           ${cpm ? `<div class="kpi-row kpi-row-2">
-            ${kpi('CPM estimé', fmt(cpm, 'CHF'), '#ff5e5e')}
-            ${kpi('LP Views / Reach', mc.reach ? pct(mc.lpviews, mc.reach) : '—', '#4dabf7')}
+            ${kpi('CPM estimé', fmt(cpm, 'CHF'), '#e74c3c')}
+            ${kpi('LP Views / Reach', mc.reach ? pct(mc.lpviews, mc.reach) : '—', '#2980b9')}
           </div>` : ''}
         </div>
         ${mc.creatives?.length ? `
@@ -720,37 +924,39 @@ function renderDash() {
       </div>
     </div>` : ''}
 
-    <!-- Présence -->
     <div class="section">
       <div class="section-header">
-        <div class="section-icon" style="background:rgba(0,207,168,.15);color:#00cfa8">👥</div>
+        <div class="section-icon" style="background:rgba(0,184,148,.12);color:#00b894">👥</div>
         <span class="section-title">Présence</span>
       </div>
       <div class="kpi-row kpi-row-4">
-        ${kpi('Participants présents', fmt(mc.presents), '#00cfa8')}
-        ${kpi('Show-up rate', fmt(mc.showup, '%'), '#00cfa8')}
-        ${kpi('Replay', fmt(mc.replay), '#4dabf7')}
-        ${kpi('No-show rate', fmt(mc.noshow, '%'), '#ff5e5e')}
+        ${kpi('Participants présents', fmt(mc.presents), '#00b894')}
+        ${kpi('Show-up rate', fmt(mc.showup, '%'), '#00b894')}
+        ${kpi('Replay', fmt(mc.replay), '#2980b9')}
+        ${kpi('No-show rate', fmt(mc.noshow, '%'), '#e74c3c')}
       </div>
     </div>
 
-    <!-- Conversion -->
     <div class="section">
       <div class="section-header">
-        <div class="section-icon" style="background:rgba(77,171,247,.15);color:#4dabf7">📞</div>
+        <div class="section-icon" style="background:rgba(41,128,185,.12);color:#2980b9">📞</div>
         <span class="section-title">Conversion</span>
       </div>
       <div class="kpi-row kpi-row-3">
-        ${kpi('Calls live', fmt(mc.callslive), '#4dabf7')}
-        ${kpi('Calls totaux', fmt(mc.callstot), '#4dabf7')}
-        ${kpi('Taux conversion global', fmt(mc.tconv, '%'), '#4dabf7')}
+        ${kpi('Calls live', fmt(mc.callslive), '#2980b9')}
+        ${kpi('Calls totaux', fmt(mc.callstot), '#2980b9')}
+        ${kpi('Taux conversion global', fmt(mc.tconv, '%'), '#2980b9')}
+      </div>
+      <div class="kpi-row kpi-row-3" style="margin-top:12px">
+        ${kpi('Calls demandés', mc.calls_demandes != null ? fmt(mc.calls_demandes) : '—', '#f39c12')}
+        ${kpi('Présents en calls', mc.presents_calls != null ? fmt(mc.presents_calls) : '—', '#f39c12')}
+        ${kpi('Deals closés', mc.deals != null ? fmt(mc.deals) : '—', '#00b894')}
       </div>
     </div>
 
-    <!-- Sources -->
     <div class="section">
       <div class="section-header">
-        <div class="section-icon" style="background:rgba(124,111,255,.15);color:#7c6fff">📊</div>
+        <div class="section-icon" style="background:rgba(124,111,255,.12);color:#7c6fff">📊</div>
         <span class="section-title">Provenance des leads</span>
       </div>
       <div class="two-col">
@@ -762,19 +968,12 @@ function renderDash() {
           <div class="card-header">Détail</div>
           <table>
             <thead><tr>
-              <th>Source</th>
-              <th>Leads</th>
-              <th>Présents</th>
-              <th>Replay</th>
-              <th>Calls</th>
+              <th>Source</th><th>Leads</th><th>Présents</th><th>Replay</th><th>Calls</th>
             </tr></thead>
             <tbody>
               ${mc.sources.map((s, i) => `
                 <tr>
-                  <td>
-                    <span class="source-dot" style="background:${COLORS[i % COLORS.length]}"></span>
-                    ${s.name}
-                  </td>
+                  <td><span class="source-dot" style="background:${COLORS[i % COLORS.length]}"></span>${s.name}</td>
                   <td><span class="num">${s.leads}</span><span class="rate">${totalLeads ? pct(s.leads, totalLeads) : ''}</span></td>
                   <td><span class="num">${s.presents}</span><span class="rate">${s.leads ? pct(s.presents, s.leads) : ''}</span></td>
                   <td><span class="num">${s.replay}</span></td>
@@ -785,12 +984,169 @@ function renderDash() {
         </div>
       </div>
     </div>
-
   </div>`;
 
   requestAnimationFrame(() => drawSourceChart(mc));
 }
 
+// ── Funnel ─────────────────────────────────────────────────────────────
+const GROUP_META = {
+  'Pub':          { color: '#7c6fff', bg: 'rgba(124,111,255,.12)' },
+  'Acquisition':  { color: '#2980b9', bg: 'rgba(41,128,185,.12)'  },
+  'Présence':     { color: '#00b894', bg: 'rgba(0,184,148,.12)'   },
+  'Conversion':   { color: '#f39c12', bg: 'rgba(243,156,18,.12)'  }
+};
+
+function buildSteps(mc) {
+  const steps = [];
+  if (mc.impressions) steps.push({ label: 'Impressions',   value: mc.impressions, group: 'Pub' });
+  if (mc.reach)       steps.push({ label: 'Reach',         value: mc.reach,       group: 'Pub' });
+  if (mc.lpviews)     steps.push({ label: 'LP Views',      value: mc.lpviews,     group: 'Pub' });
+  if (mc.inscrits)    steps.push({ label: 'Inscrits',      value: mc.inscrits,    group: 'Acquisition' });
+  if (mc.presents)          steps.push({ label: 'Présents live',    value: mc.presents,       group: 'Présence', note: mc.replay ? `+ ${mc.replay} replay` : null });
+  if (mc.callstot)          steps.push({ label: 'Calls totaux',     value: mc.callstot,       group: 'Conversion' });
+  if (mc.calls_demandes != null) steps.push({ label: 'Calls demandés',  value: mc.calls_demandes, group: 'Conversion' });
+  if (mc.presents_calls != null) steps.push({ label: 'Présents en calls', value: mc.presents_calls, group: 'Conversion' });
+  if (mc.deals != null)     steps.push({ label: 'Deals closés',     value: mc.deals,          group: 'Conversion' });
+  return steps;
+}
+
+function convColor(rate) {
+  if (rate >= 30) return 'good';
+  if (rate >= 8)  return 'ok';
+  return 'warn';
+}
+
+function renderFunnel() {
+  const mc = db.find(m => m.id === currentId);
+  const el = document.getElementById('funnel-content');
+
+  if (!mc) {
+    el.innerHTML = `<div class="empty"><h2>Aucune masterclass</h2><p>Créez votre première masterclass via "+ Nouvelle"</p></div>`;
+    return;
+  }
+
+  const steps = buildSteps(mc);
+  if (!steps.length) {
+    el.innerHTML = `<div class="empty"><h2>Données insuffisantes</h2><p>Renseignez au moins Impressions et Inscrits pour visualiser le funnel.</p></div>`;
+    return;
+  }
+
+  const maxVal = steps[0].value;
+
+  // Build funnel rows HTML
+  let funnelHTML = '';
+  steps.forEach((step, i) => {
+    const gm = GROUP_META[step.group];
+    // Log scale for bar width: min 8%, max 100%
+    const widthPct = Math.max(8, (Math.log(step.value + 1) / Math.log(maxVal + 1)) * 92);
+
+    funnelHTML += `
+      <div class="funnel-step-wrap">
+        <div class="funnel-step">
+          <div class="funnel-left">
+            <span class="funnel-group-tag" style="background:${gm.bg};color:${gm.color}">${step.group}</span>
+            <span class="funnel-step-label">${step.label}</span>
+          </div>
+          <div class="funnel-center">
+            <div class="funnel-bar-track">
+              <div class="funnel-bar" style="width:${widthPct}%;background:${gm.color};opacity:.85">
+              </div>
+            </div>
+          </div>
+          <div class="funnel-right">
+            <span class="funnel-val">${step.value.toLocaleString('fr-FR')}</span>
+            ${step.note ? `<span class="funnel-note">${step.note}</span>` : ''}
+          </div>
+        </div>`;
+
+    // Connector between steps
+    if (i < steps.length - 1) {
+      const next = steps[i + 1];
+      const rate = (next.value / step.value) * 100;
+      const lost = step.value - next.value;
+      const cls  = convColor(rate);
+
+      funnelHTML += `
+        <div class="funnel-connector">
+          <div class="funnel-connector-inner">
+            <span class="conv-arrow">↓</span>
+            <span class="conv-rate ${cls}">${rate.toFixed(1)}% ont continué</span>
+            <span class="conv-lost">− ${lost.toLocaleString('fr-FR')} perdus</span>
+          </div>
+        </div>`;
+    }
+
+    funnelHTML += `</div>`;
+  });
+
+  // Synthesis: find biggest drop-offs
+  const drops = [];
+  for (let i = 0; i < steps.length - 1; i++) {
+    const rate = (steps[i+1].value / steps[i].value) * 100;
+    drops.push({ from: steps[i].label, to: steps[i+1].label, rate, lost: steps[i].value - steps[i+1].value });
+  }
+  drops.sort((a, b) => a.rate - b.rate);
+  const topDrops = drops.slice(0, 3);
+
+  // Global rates
+  const globalRates = [];
+  if (mc.inscrits && mc.presents)  globalRates.push({ label: 'Inscrits → Présents',  val: pct(mc.presents, mc.inscrits) });
+  if (mc.inscrits && mc.callstot)  globalRates.push({ label: 'Inscrits → Calls',     val: pct(mc.callstot, mc.inscrits) });
+  if (mc.inscrits && mc.deals != null) globalRates.push({ label: 'Inscrits → Deals', val: mc.deals != null ? pct(mc.deals, mc.inscrits) : '—' });
+  if (mc.presents && mc.callstot)  globalRates.push({ label: 'Présents → Calls',     val: pct(mc.callstot, mc.presents) });
+  if (mc.callstot && mc.deals != null && mc.deals > 0) globalRates.push({ label: 'Calls → Deals', val: pct(mc.deals, mc.callstot) });
+
+  el.innerHTML = `
+  <div class="funnel-wrap">
+    <div class="mc-meta">
+      <h1>${mc.theme}</h1>
+      <span class="mc-meta-badge">${fmtDate(mc.date)}</span>
+    </div>
+    <div class="funnel-layout">
+
+      <div class="funnel-main">
+        <div class="funnel-title">Funnel de conversion</div>
+        ${funnelHTML}
+      </div>
+
+      <div class="synthesis-panel">
+
+        <div class="synth-card">
+          <h3>Points de friction</h3>
+          ${topDrops.map(d => {
+            const isWarn = d.rate < 8;
+            const isOk   = d.rate >= 8 && d.rate < 30;
+            const icon   = isWarn ? '🔴' : isOk ? '🟡' : '🟢';
+            const col    = isWarn ? '#e74c3c' : isOk ? '#f39c12' : '#00b894';
+            return `<div class="friction-item">
+              <div class="friction-icon" style="background:${col}20;font-size:14px">${icon}</div>
+              <div>
+                <div class="friction-label">${d.from} → ${d.to}</div>
+                <div class="friction-sub">${d.rate.toFixed(1)}% de rétention · −${d.lost.toLocaleString('fr-FR')}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        ${globalRates.length ? `
+        <div class="synth-card">
+          <h3>Taux clés</h3>
+          <div class="global-rate">
+            ${globalRates.map(r => `
+              <div class="rate-row">
+                <span class="rate-label">${r.label}</span>
+                <span class="rate-val">${r.val}</span>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
+
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── KPI helpers ────────────────────────────────────────────────────────
 function kpi(label, value, color) {
   return `<div class="kpi">
     <div class="kpi-stripe" style="background:${color}"></div>
@@ -809,7 +1165,7 @@ function fmt(v, unit = '') {
 }
 
 function pct(a, b) {
-  if (!b) return '';
+  if (!b) return '—';
   return `${((a / b) * 100).toFixed(1)}%`;
 }
 
@@ -818,6 +1174,7 @@ function fmtDate(d) {
   return new Date(d + 'T00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
+// ── Chart ──────────────────────────────────────────────────────────────
 function drawSourceChart(mc) {
   if (sourceChart) { sourceChart.destroy(); sourceChart = null; }
   const ctx = document.getElementById('source-chart');
@@ -828,10 +1185,10 @@ function drawSourceChart(mc) {
     data: {
       labels: mc.sources.map(s => s.name),
       datasets: [
-        { label: 'Leads',    data: mc.sources.map(s => s.leads),    backgroundColor: 'rgba(124,111,255,.85)', borderRadius: 5 },
-        { label: 'Présents', data: mc.sources.map(s => s.presents), backgroundColor: 'rgba(0,207,168,.85)',   borderRadius: 5 },
-        { label: 'Replay',   data: mc.sources.map(s => s.replay),   backgroundColor: 'rgba(77,171,247,.85)',  borderRadius: 5 },
-        { label: 'Calls',    data: mc.sources.map(s => s.calls),    backgroundColor: 'rgba(255,179,71,.85)',  borderRadius: 5 }
+        { label: 'Leads',    data: mc.sources.map(s => s.leads),    backgroundColor: 'rgba(124,111,255,.8)', borderRadius: 5 },
+        { label: 'Présents', data: mc.sources.map(s => s.presents), backgroundColor: 'rgba(0,184,148,.8)',   borderRadius: 5 },
+        { label: 'Replay',   data: mc.sources.map(s => s.replay),   backgroundColor: 'rgba(41,128,185,.8)',  borderRadius: 5 },
+        { label: 'Calls',    data: mc.sources.map(s => s.calls),    backgroundColor: 'rgba(243,156,18,.8)',  borderRadius: 5 }
       ]
     },
     options: {
@@ -848,8 +1205,8 @@ function drawSourceChart(mc) {
   });
 }
 
-// ── Form – sources ─────────────────────────────────────────────────────
-let sourceRows = [];
+// ── Form ───────────────────────────────────────────────────────────────
+let sourceRows = [], creativeRows = [];
 
 function renderSourceRows() {
   document.getElementById('sources-list').innerHTML = sourceRows.map((s, i) => `
@@ -857,8 +1214,7 @@ function renderSourceRows() {
       <div class="source-name-row">
         <div class="fg">
           <label>Nom de la source</label>
-          <input type="text" value="${s.name}" placeholder="Ex: Neuroly Publicité"
-            oninput="sourceRows[${i}].name = this.value">
+          <input type="text" value="${s.name}" placeholder="Ex: Neuroly Publicité" oninput="sourceRows[${i}].name = this.value">
         </div>
       </div>
       <div class="source-row-top">
@@ -871,19 +1227,15 @@ function renderSourceRows() {
     </div>`).join('');
 }
 
-function addSourceRow()       { sourceRows.push({ name:'', leads:0, presents:0, replay:0, calls:0 }); renderSourceRows(); }
-function removeSourceRow(i)   { sourceRows.splice(i, 1); renderSourceRows(); }
-
-// ── Form – creatives ───────────────────────────────────────────────────
-let creativeRows = [];
+function addSourceRow()     { sourceRows.push({ name:'', leads:0, presents:0, replay:0, calls:0 }); renderSourceRows(); }
+function removeSourceRow(i) { sourceRows.splice(i, 1); renderSourceRows(); }
 
 function renderCreativeRows() {
   document.getElementById('creatives-list').innerHTML = creativeRows.map((c, i) => `
     <div class="creative-row-form">
       <div class="fg">
         <label>Nom</label>
-        <input type="text" value="${c.name}" placeholder="Ex: Créa 1"
-          oninput="creativeRows[${i}].name = this.value">
+        <input type="text" value="${c.name}" placeholder="Ex: Créa 1" oninput="creativeRows[${i}].name = this.value">
       </div>
       <div class="fg">
         <label>Performance</label>
@@ -900,20 +1252,18 @@ function renderCreativeRows() {
 function addCreativeRow()      { creativeRows.push({ name: '', perf: 'top' }); renderCreativeRows(); }
 function removeCreativeRow(i)  { creativeRows.splice(i, 1); renderCreativeRows(); }
 
-// ── Reset form ─────────────────────────────────────────────────────────
 function resetForm() {
   ['date','theme','budget','visiteurs','pages','inscrits','cpl','cout','bounce','tps',
    'impressions','reach','lpviews',
-   'presents','showup','replay','noshow','callslive','callstot','tconv']
+   'presents','showup','replay','noshow','callslive','callstot','tconv',
+   'calls_demandes','presents_calls','deals']
     .forEach(id => { const el = document.getElementById('f-' + id); if (el) el.value = ''; });
-
   sourceRows   = [{ name: '', leads: 0, presents: 0, replay: 0, calls: 0 }];
   creativeRows = [{ name: '', perf: 'top' }];
   renderSourceRows();
   renderCreativeRows();
 }
 
-// ── Save ───────────────────────────────────────────────────────────────
 function g(id) {
   const v = document.getElementById('f-' + id)?.value;
   return (v === '' || v == null) ? null : parseFloat(v);
@@ -925,14 +1275,14 @@ function saveMC() {
   if (!date || !theme) { toast('Date et thématique obligatoires', true); return; }
 
   const mc = {
-    id: Date.now(),
-    date, theme,
+    id: Date.now(), date, theme,
     budget: g('budget'), visiteurs: g('visiteurs'), pages: g('pages'), inscrits: g('inscrits'),
     cpl: g('cpl'), cout: g('cout'), bounce: g('bounce'), tps: g('tps'),
     impressions: g('impressions'), reach: g('reach'), lpviews: g('lpviews'),
     creatives: creativeRows.filter(c => c.name.trim()),
     presents: g('presents'), showup: g('showup'), replay: g('replay'), noshow: g('noshow'),
     callslive: g('callslive'), callstot: g('callstot'), tconv: g('tconv'),
+    calls_demandes: g('calls_demandes'), presents_calls: g('presents_calls'), deals: g('deals'),
     sources: sourceRows.filter(s => s.name.trim())
   };
 
@@ -944,12 +1294,11 @@ function saveMC() {
   toast('Masterclass enregistrée !');
 }
 
-// ── Toast ──────────────────────────────────────────────────────────────
 function toast(msg, isError = false) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.style.background = isError ? 'var(--red)' : 'var(--green)';
-  el.style.color = isError ? 'white' : '#0d0f18';
+  el.style.color = isError ? 'white' : 'white';
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2500);
 }
